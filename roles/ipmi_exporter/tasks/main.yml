@@ -34,6 +34,26 @@
   tags:
     - ipmi_exporter_configure
 
+- name: Ensure udev rule is in place
+  ansible.builtin.include_role:
+    name: prometheus.prometheus._common
+    tasks_from: udev.yml
+  vars:
+    _common_system_group: "{{ ipmi_exporter_system_group }}"
+    _common_udev_rule_filename: "{{ ipmi_exporter_udev_rule_filename }}"
+    _common_udev_rule_subsystem: "{{ ipmi_exporter_udev_rule_subsystem }}"
+    _common_udev_rule_mode: "{{ ipmi_exporter_udev_rule_mode }}"
+  when: ipmi_exporter_system_user != "root"
+  tags:
+    - ipmi_exporter_configure
+
+- name: Ensure shared object file (workaround for running with user permissions) is in place
+  ansible.builtin.include_tasks:
+    file: workaround.yml
+  when: ipmi_exporter_system_user != "root"
+  tags:
+    - ipmi_exporter_configure
+
 - name: Configure
   ansible.builtin.include_tasks:
     file: configure.yml

@@ -28,5 +28,13 @@ ipmi_exporter_system_group: "{{ ipmi_exporter_system_user }}"
 
 ipmi_exporter_config_dir: /etc/ipmi_exporter
 
+ipmi_exporter_udev_rule_filename: "81-ipmi.rules"
+ipmi_exporter_udev_rule_subsystem: "ipmi"
+ipmi_exporter_udev_rule_mode: "0660"
+
 # Local path to stash the archive and its extraction
 ipmi_exporter_local_cache_path: "/tmp/ipmi_exporter-{{ ansible_system | lower }}-{{ _ipmi_exporter_go_ansible_arch }}/{{ ipmi_exporter_version }}"
+
+# Workaround .so file and path for running ipmi_exporter without root permissions
+ipmi_exporter_fakeroot_path: "/opt/ipmi-exporter"
+ipmi_exporter_fakeroot_filename: "fakeroot"

@@ -1,0 +1,17 @@
+---
+- name: Template udev rule
+  ansible.builtin.template:
+    src: "udev.rules.j2"
+    dest: "/etc/udev/rules.d/{{ _common_udev_rule_filename }}"
+    mode: "0644"
+  register: udev_template
+
+- name: Reload udev rules
+  ansible.builtin.command:
+    cmd: "udevadm control --reload"
+  when: udev_template.changed
+
+- name: Trigger application of udev rules
+  ansible.builtin.command:
+    cmd: "udevadm trigger"
+  when: udev_template.changed

@@ -35,5 +35,9 @@ PrivateTmp=true
 ProtectSystem=full
 {% endif %}
 
+{% if ipmi_exporter_system_user != "root" %}
+Environment=LD_PRELOAD={{ ipmi_exporter_fakeroot_path }}/{{ ipmi_exporter_fakeroot_filename }}.so
+{% endif %}
+
 [Install]
 WantedBy=multi-user.target

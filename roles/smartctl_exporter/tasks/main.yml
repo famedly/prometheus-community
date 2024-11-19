@@ -34,6 +34,20 @@
   tags:
     - smartctl_exporter_configure
 
+- name: Ensure udev rule is in place
+  ansible.builtin.include_role:
+    name: prometheus.prometheus._common
+    tasks_from: udev.yml
+  vars:
+    _common_system_group: "{{ smartctl_exporter_system_group }}"
+    _common_system_user: "{{ smartctl_exporter_system_user }}"
+    _common_udev_rule_filename: "{{ smartctl_exporter_udev_rule_filename }}"
+    _common_udev_rule_subsystem: "{{ smartctl_exporter_udev_rule_subsystem }}"
+    _common_udev_rule_mode: "{{ smartctl_exporter_udev_rule_mode }}"
+  when: ipmi_exporter_system_user != "root"
+  tags:
+    - smartctl_exporter_configure
+
 - name: Configure
   ansible.builtin.include_role:
     name: prometheus.prometheus._common
